@@ -1,0 +1,5 @@
+aiogram
+requests
+psycopg2
+python-binance
+pandas
