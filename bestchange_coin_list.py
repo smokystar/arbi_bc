@@ -5,7 +5,7 @@ import pandas as pd
 from binance import Client
 from datetime import datetime
 from bestchange_api import BestChange
-from scan_bot.bestchange_arbibot.create_bc import dp, bot
+from create_bc import dp, bot
 import psycopg2
 
 admin_id = 394652149
