@@ -36,7 +36,20 @@ async def bestchange_scaner(prmin, user_id):
     #     id_list.append(list_id)
     # print(id_list)
     id_list = [168, 216, 217, 61, 16, 19, 93, 172, 181, 197, 198, 140, 227, 115, 178, 160, 139, 212, 104, 179, 134, 99, 213, 149, 76, 173, 177, 48, 135, 201, 138, 26, 205, 161, 32, 210, 82, 182, 185, 2, 175, 202, 8, 133, 220, 162]
-
+    bestchange_links = [{168: 'zrx'}, {216: 'algorand'}, {217: 'avalanche'}, {61: 'bat'}, {16: 'binance-coin-bep2'},
+                        {19: 'binance-coin'}, {93: 'bitcoin'}, {172: 'bitcoin-cash'}, {181: 'cardano'},
+                        {197: 'chainlink'},
+                        {198: 'cosmos'}, {140: 'dash'}, {227: 'decentraland'}, {115: 'dogecoin'}, {178: 'eos'},
+                        {160: 'ethereum-classic'},
+                        {139: 'ethereum'}, {212: 'ethereum-bep20'}, {104: 'icon'}, {179: 'iota'}, {134: 'komodo)'},
+                        {99: 'litecoin'},
+                        {213: 'maker'}, {149: 'monero'}, {76: 'near'}, {173: 'nem'}, {177: 'neo'}, {48: 'omg'},
+                        {135: 'ontology'}, {201: 'polkadot'}, {138: 'polygon'}, {26: 'qtum'}, {205: 'ravencoin'},
+                        {161: 'ripple'},
+                        {32: 'shiba-inu-bep20'}, {210: 'shiba-inu'}, {82: 'solana'}, {182: 'stellar'}, {185: 'tron'},
+                        {2: 'terra'},
+                        {175: 'tezos'}, {202: 'uniswap'}, {8: 'vechain'}, {133: 'waves'}, {220: 'yearn-finance'},
+                        {162: 'zcash'}]
     rates_list = []
     # print(id_list)
 
@@ -47,6 +60,8 @@ async def bestchange_scaner(prmin, user_id):
                 try:
                     # print(f"i: {i}, j: {j}")
                     res = api.rates().filter(i, j)
+                    give_link = bestchange_links[i]
+                    get_link = bestchange_links[j]
                     give_coin = res[0]['give_id']
                     get_coin = res[0]['get_id']
                     exchange = res[0]['exchange_id']
@@ -67,7 +82,9 @@ async def bestchange_scaner(prmin, user_id):
                                 'min_sum': min_sum,
                                 'max_sum': max_sum,
                                 'give': give,
-                                'get': get}
+                                'get': get,
+                                'give_link':give_link,
+                                'get_link':get_link}
                     rates_list.append(dict_tmp)
                     # print(dict_tmp)
 
@@ -134,8 +151,10 @@ async def bestchange_scaner(prmin, user_id):
             price_bbb = cur.fetchone()[0]
             # print('market price get coin: ', price_bbb)
             profit = sum / price_aaa / cc * price_bbb
+            give_l = rates_list['give_link']
+            get_l = rates_list['get_link']
             # if profit - sum >= 2:
-            tmp_dict = {'give_coin'  : aaa, 'get_coin' : bbb, 'bestchange_rate' : cc, 'binance_price_give' : price_aaa, 'binance_price_get' : price_bbb, 'profit' : profit}
+            tmp_dict = {'give_coin'  : aaa, 'get_coin' : bbb, 'bestchange_rate' : cc, 'binance_price_give' : price_aaa, 'binance_price_get' : price_bbb, 'profit' : profit, 'give_l':give_l, 'get_l':get_l}
             bc_parse.append(tmp_dict)
             # print('profit: ', profit)
             # print('give_coin: ', aaa)
@@ -168,6 +187,9 @@ async def bestchange_scaner(prmin, user_id):
             binance_price_get = items_max['binance_price_get']
             slvr_proc_max = (float(items_max['profit']) - 1000) / (1000 / 100)
             round_slvr_proc_max = round(slvr_proc_max, 3)
+            give_li = items_max['give_l']
+            get_li = items_max['get_l']
+            
             cur.execute(f"select tele_id from arbi_users")
             users = cur.fetchall()
 
@@ -177,10 +199,10 @@ async def bestchange_scaner(prmin, user_id):
 
                     await bot.send_message(mes_for_user_id,
                                                f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
-                                               f"Buy {give_coin_name} on the Binance spot market by this price: {binance_price_give}\n"
+                                               f"Buy {give_coin_name} on the Binance spot market by this price: {binance_price_give}\n\n"
                                                f"Swap {give_coin_name} on the bestchange site for {get_coin_name}\n"
                                                f"(Price: {bc_rate}) by this link:\n"
-                                               f"https://www.bestchange.ru\n\n"
+                                               f"https://www.bestchange.ru/{give_li}-to-{get_li}.html\n\n"
                                                f"Sell {get_coin_name} on the Binance spot market by this price: {binance_price_get}")
 
             else:
