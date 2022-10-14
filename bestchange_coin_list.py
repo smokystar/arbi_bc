@@ -26,7 +26,7 @@ cur = con.cursor()
 # print(start_time)
 
 
-def bestchange_scaner(prmin, user_id):
+async def bestchange_scaner(prmin, user_id):
     start_time = datetime.now()
     print(start_time)
     sum = 1000
@@ -215,7 +215,7 @@ def bestchange_scaner(prmin, user_id):
                 for i in users:
                     mes_for_user_id = i[0]
 
-                    bot.send_message(mes_for_user_id, f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
+                    await bot.send_message(mes_for_user_id, f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
                                            f"Buy {give_coin_name} on the Binance spot market by this price: {binance_price_give}\n\n"
                                            f"Swap {give_coin_name} on the bestchange site for {get_coin_name} by this link:\n"
                                            f"https://www.bestchange.ru/{give_li}-to-{get_li}.html\n"
@@ -225,11 +225,11 @@ def bestchange_scaner(prmin, user_id):
                     
 
             else:
-                bot.send_message(admin_id, 'No results')
+                await bot.send_message(admin_id, 'No results')
                 
 
 
         except Exception as e:
-            bot.send_message(admin_id, f'error: {e}')
+            await bot.send_message(admin_id, f'error: {e}')
             pass
 
