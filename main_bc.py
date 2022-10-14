@@ -2,12 +2,12 @@ from aiogram.utils import executor
 from create_bc import dp
 import psycopg2
 
-con = psycopg2.connect(user="uhwgxkaboaglce",
-                                password="75db761e1367ffdf929f791edc4dcd1a58936cbe3fa9e87c920ca16338f2374c",
-                                host="ec2-52-48-159-67.eu-west-1.compute.amazonaws.com",
-                                port="5432",
-                                database="d5ehlrsmpq329l")
-cur = con.cursor()
+# con = psycopg2.connect(user="uhwgxkaboaglce",
+#                                 password="75db761e1367ffdf929f791edc4dcd1a58936cbe3fa9e87c920ca16338f2374c",
+#                                 host="ec2-52-48-159-67.eu-west-1.compute.amazonaws.com",
+#                                 port="5432",
+#                                 database="d5ehlrsmpq329l")
+# cur = con.cursor()
 
 async def on_startup(_):
     print('Bot is online')
