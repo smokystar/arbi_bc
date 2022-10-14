@@ -15,9 +15,10 @@ secret_key = 'IU08Ye3WRhrjBEZl28vA9CN3TWL2fLSEv1XMZA8kYjmASbWOPpvVwhXfF6s6WQyS'
 client = Client(api_key, secret_key)
 
 
+
 async def bestchange_scaner(prmin, user_id):
     start_time = datetime.now()
-    # print(start_time)
+    print(start_time)
     sum = 1000
     api = BestChange()
     currencies = api.currencies().get()
@@ -67,57 +68,11 @@ async def bestchange_scaner(prmin, user_id):
                         175: 'tezos', 202: 'uniswap', 8: 'vechain', 133: 'waves', 220: 'yearn-finance',
                         162: 'zcash'}
     rates_list = []
-    # print(id_list)
-
-    for i in id_list:
-        try:
-            for j in id_list:
-                try:
-                    # print(f"i: {i}, j: {j}")
-
-                    res = api.rates().filter(i, j)
-                    q_give = res[0]['give']
-                    q_get = res[0]['get']
-                    give_coin = res[0]['give_id']
-                    get_coin = res[0]['get_id']
-
-                    give_link = bestchange_links[give_coin]
-                    get_link = bestchange_links[get_coin]
-
-                    exchange = res[0]['exchange_id']
-                    coins_rate = res[0]['rate']
-                    reserve = res[0]['reserve']
-                    min_sum = res[0]['min_sum']
-                    max_sum = res[0]['max_sum']
-                    give = res[0]['give']
-                    get = res[0]['get']
-                    exch_name = exch[exchange]['name']
-                    give_coin_name = currencies[i]['name']
-                    get_coin_name = currencies[j]['name']
-                    dict_tmp = {'give_coin': give_coin_name,
-                                'get_coin': get_coin_name,
-                                'exchange_name': exch_name,
-                                'rate': coins_rate,
-                                'reserve': reserve,
-                                'min_sum': min_sum,
-                                'max_sum': max_sum,
-                                'give': give,
-                                'get': get,
-                                'give_link': give_link,
-                                'get_link': get_link}
-                    rates_list.append(dict_tmp)
-                    # print(dict_tmp)
-                except:
-                    pass
-        except:
-            pass
-
+    
+    
     cur.execute(f"delete from binance_tickers")
     con.commit()
-    # cur.execute("create table binance_tickers(id bigint primary key,"
-    #             "ZRX_price float, ALGO_price float, AVAX_price float,"
-    #             "BAT_price float, BNB_price float,BTC_price float, BCH_price float, ADA_price float, LINK_price float, ATOM_price float, DASH_price float, MANA_price float, DOGE_price float, EOS_price float, ETC_price float, ETH_price float, ICX_price float, MIOTA_price float, KMD_price float, LTC_price float, MKR_price float, XMR_price float, NEAR_price float, XEM_price float, NEO_price float, OMG_price float, ONT_price float, DOT_price float,MATIC_price float, QTUM_price float, RVN_price float, XRP_price float, SHIB_price float, SOL_price float, XLM_price float, TRX_price float, LUNA_price float, XTZ_price float, UNI_price float, VET_price float, WAVES_price float,YFI_price float, ZEC_price float)")
-
+    
     global id
     cur.execute(f'select count(*) from binance_tickers')
     id = cur.fetchone()[0]
@@ -141,101 +96,55 @@ async def bestchange_scaner(prmin, user_id):
                 last_price = float(price['lastPrice'])
                 cur.execute(f"update binance_tickers set {aaa}_price = {last_price} where id = {id}")
                 con.commit()
-
-        except:
-            pass
-
-    bc_parse = []
-    for j in rates_list:
-        try:
-            aa = j['give_coin']
-            aaa = aa.split()[-1].replace('(', '').replace(')', '')
-            # print('give_coin: ', aaa)
-            bb = j['get_coin']
-            bbb = bb.split()[-1].replace('(', '').replace(')', '')
-            # print('get_coin: ', bbb)
-            cc = j['rate']
-            # print('rate: ', cc)
-            cur.execute(f"select {aaa}_price from binance_tickers")
-            price_aaa = cur.fetchone()[0]
-            # print('market price give coin: ', price_aaa)
-            cur.execute(f"select {bbb}_price from binance_tickers")
-            price_bbb = cur.fetchone()[0]
-            # print('market price get coin: ', price_bbb)
-            profit = sum / price_aaa / cc * price_bbb
-            give_l = j['give_link']
-            get_l = j['get_link']
-#             qu_give = j['q_give']
-#             qu_get = j['q_get']
-#             mi_sum = j['min_sum']
-#             ma_sum = j['max_sum']
-            exchanger_name = j['exchange_name']
-            # if profit - sum >= 2:
-            tmp_dict = {'give_coin': aaa, 'get_coin': bbb, 'bestchange_rate': cc, 'binance_price_give': price_aaa,
-                        'binance_price_get': price_bbb, 'profit': profit, 'give_l': give_l, 'get_l': get_l,
-                        'exchanger_name': exchanger_name}
-            bc_parse.append(tmp_dict)
-
-        except:
-            pass
-
-    if len(bc_parse) != 0:
-        df = pd.DataFrame(bc_parse)
-        str = df.sort_values(by='profit', ascending=False)
-        strstr = str.head(1)
-        try:
-            max_message = strstr.iloc[0].to_json()
-            items_max = json.loads(max_message)
-            give_coin_name = items_max['give_coin']
-            get_coin_name = items_max['get_coin']
-            bc_rate = items_max['bestchange_rate']
-            binance_price_give = items_max['binance_price_give']
-            binance_price_get = items_max['binance_price_get']
-            slvr_proc_max = (float(items_max['profit']) - 1000) / (1000 / 100)
-            round_slvr_proc_max = round(slvr_proc_max, 3)
-            give_li = items_max['give_l']
-            get_li = items_max['get_l']
-            exch_name = items_max['exchanger_name']
-#             qua_give = j['qu_give']
-#             qua_get = j['qu_get']
-#             minn = j['min']
-#             maxx = j['max']
-
-            cur.execute(f"select tele_id from arbi_users")
-            users = cur.fetchall()
-
-            if slvr_proc_max > prmin:
-                for i in users:
-                    mes_for_user_id = i[0]
-
-#                     await bot.send_message(mes_for_user_id,
-#                                            f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
-#                                            f"Buy {give_coin_name} on the Binance spot market by this price: {binance_price_give}\n\n"
-#                                            f"Swap {give_coin_name} on the bestchange site for {get_coin_name} by this link:\n"
-#                                            f"https://www.bestchange.ru/{give_li}-to-{get_li}.html\n\n"
-#                                            f"Give: {qua_give} {give_coin_name}\nGet: {qua_get} {get_coin_name}\n"
-#                                            f"Price rate: {bc_rate}\n"
-#                                            f"Min transaction: {minn}\n"
-#                                            f"Max transaction: {maxx}\n"
-#                                            f"Exchange name: {exch_name}\n\n"
-#                                            f"Sell {get_coin_name} on the Binance spot market by this price: {binance_price_get}")
-                    await bot.send_message(mes_for_user_id,
-                                           f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
-                                           f"Buy {give_coin_name} on the Binance spot market by this price: {binance_price_give}\n\n"
-                                           f"Swap {give_coin_name} on the bestchange site for {get_coin_name} by this link:\n"
-                                           f"https://www.bestchange.ru/{give_li}-to-{get_li}.html\n\n"
-                                           f"Price rate: {bc_rate}\n"
-                                           f"Exchange name: {exch_name}\n\n"
-                                           f"Sell {get_coin_name} on the Binance spot market by this price: {binance_price_get}")
-
-
-
-            else:
-                await bot.send_message(admin_id, 'No results')
-
-
-
         except Exception as e:
-            await bot.send_message(admin_id, f'error: {e}')
+            print(f'Exception: {e}')
             pass
-
+    
+    for i in id_list:
+        try:
+            for j in id_list:
+                try:
+                    res = api.rates().filter(i, j)
+                    give_coin_name = currencies[i]['name']
+                    get_coin_name = currencies[j]['name']
+                    aaa = give_coin_name.split()[-1].replace('(', '').replace(')', '')
+                    bbb = get_coin_name.split()[-1].replace('(', '').replace(')', '')
+                    cc = res[0]['rate']
+                    cur.execute(f"select {aaa}_price from binance_tickers")
+                    price_aaa = cur.fetchone()[0]
+                    cur.execute(f"select {bbb}_price from binance_tickers")
+                    price_bbb = cur.fetchone()[0]
+                    profit = sum / price_aaa / cc * price_bbb
+                    slvr_proc_max = (float((profit - 1000) / (1000 / 100)))
+                    round_slvr_proc_max = round(slvr_proc_max, 3)
+                    cur.execute(f"select tele_id from arbi_users")
+                    users = cur.fetchall()
+                    if slvr_proc_max > prmin:
+                        exchange = res[0]['exchange_id']
+                        exch_name = exch[exchange]['name']
+                        min_sum = res[0]['min_sum']
+                        max_sum = res[0]['max_sum']
+                        give_quantity = res[0]['give']
+                        get_quantity = res[0]['get']
+                        link_a = bestchange_links[i]
+                        link_b = bestchange_links[j]
+                        for i in users:
+                            mes_for_user_id = i[0]
+                            await bot.send_message(mes_for_user_id, f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
+                                                   f"Buy {give_coin_name} on the Binance spot market by this price: {price_aaa}\n\n"
+                                                   f"Swap {give_coin_name} on the bestchange site for {get_coin_name} by this link:\n"
+                                                   f"https://www.bestchange.ru/{link_a}-to-{link_b}.html\n\n"
+                                                   f"Give: {give_quantity} {give_coin_name}\n"
+                                                   f"Get: {get_quantity} {get_coin_name}\n"
+                                                   f"Price rate: {cc}\n"
+                                                   f"Transaction from: {min_sum} to: {max_sum}\n"
+                                                   f"Exchange name: {exch_name}\n\n"
+                                                   f"Sell {get_coin_name} on the Binance spot market by this price: {price_bbb}")
+                except Exception as e:
+                    # print(f'Exception: {e}')
+                    pass
+        except Exception as e:
+            # print(f'Exception: {e}')
+            pass
+    end_time = datetime.now()
+    print(f"start: {start_time}, end: {end_time}")
