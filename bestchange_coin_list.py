@@ -5,65 +5,97 @@ import pandas as pd
 from binance import Client
 from datetime import datetime
 from bestchange_api import BestChange
-from create_bc import dp, bot
+from scan_bot.bestchange_arbibot.create_bc import dp, bot
 import psycopg2
-admin_id = 394652149
 
+admin_id = 394652149
 
 api_key = '1QrbAnjDYWcnmKoQYVn2ZSphucr4yXZtWEwUATG103rqfgJqG0VZ5kW7vdtMIS0Q'
 secret_key = 'IU08Ye3WRhrjBEZl28vA9CN3TWL2fLSEv1XMZA8kYjmASbWOPpvVwhXfF6s6WQyS'
 client = Client(api_key, secret_key)
 
 con = psycopg2.connect(user="uhwgxkaboaglce",
-                                password="75db761e1367ffdf929f791edc4dcd1a58936cbe3fa9e87c920ca16338f2374c",
-                                host="ec2-52-48-159-67.eu-west-1.compute.amazonaws.com",
-                                port="5432",
-                                database="d5ehlrsmpq329l")
+                       password="75db761e1367ffdf929f791edc4dcd1a58936cbe3fa9e87c920ca16338f2374c",
+                       host="ec2-52-48-159-67.eu-west-1.compute.amazonaws.com",
+                       port="5432",
+                       database="d5ehlrsmpq329l")
 cur = con.cursor()
+
 
 # start_time = datetime.now()
 # print(start_time)
 
 
-async def bestchange_scaner(prmin, user_id):
+def bestchange_scaner(prmin, user_id):
+    start_time = datetime.now()
+    print(start_time)
     sum = 1000
     api = BestChange()
     currencies = api.currencies().get()
     exch = api.exchangers().get()
-    bc_list = [{'coin': '0x (ZRX)', 'id': 168}, {'coin': 'Algorand (ALGO)', 'id': 216}, {'coin': 'Avalanche (AVAX)', 'id': 217}, {'coin': 'BAT (BAT)', 'id': 61}, {'coin': 'BinanceCoin BEP2 (BNB)', 'id': 16}, {'coin': 'BinanceCoin BEP20 (BNB)', 'id': 19}, {'coin': 'Bitcoin (BTC)', 'id': 93}, {'coin': 'Bitcoin Cash (BCH)', 'id': 172}, {'coin': 'Cardano (ADA)', 'id': 181}, {'coin': 'Chainlink (LINK)', 'id': 197},  {'coin': 'Cosmos (ATOM)', 'id': 198}, {'coin': 'Dash (DASH)', 'id': 140}, {'coin': 'Decentraland (MANA)', 'id': 227}, {'coin': 'Dogecoin (DOGE)', 'id': 115}, {'coin': 'EOS (EOS)', 'id': 178}, {'coin': 'Ether Classic (ETC)', 'id': 160}, {'coin': 'Ethereum (ETH)', 'id': 139}, {'coin': 'Ethereum BEP20 (ETH)', 'id': 212},  {'coin': 'ICON (ICX)', 'id': 104}, {'coin': 'IOTA (MIOTA)', 'id': 179}, {'coin': 'Komodo (KMD)', 'id': 134}, {'coin': 'Litecoin (LTC)', 'id': 99}, {'coin': 'Maker (MKR)', 'id': 213}, {'coin': 'Monero (XMR)', 'id': 149}, {'coin': 'NEAR Protocol (NEAR)', 'id': 76}, {'coin': 'NEM (XEM)', 'id': 173}, {'coin': 'NEO (NEO)', 'id': 177}, {'coin': 'OMG Network (OMG)', 'id': 48}, {'coin': 'Ontology (ONT)', 'id': 135}, {'coin': 'Polkadot (DOT)', 'id': 201}, {'coin': 'Polygon (MATIC)', 'id': 138}, {'coin': 'Qtum (QTUM)', 'id': 26}, {'coin': 'Ravencoin (RVN)', 'id': 205}, {'coin': 'Ripple (XRP)', 'id': 161}, {'coin': 'Shiba BEP20 (SHIB)', 'id': 32}, {'coin': 'Shiba ERC20 (SHIB)', 'id': 210}, {'coin': 'Solana (SOL)', 'id': 82}, {'coin': 'Stellar (XLM)', 'id': 182}, {'coin': 'TRON (TRX)', 'id': 185}, {'coin': 'Terra (LUNA)', 'id': 2}, {'coin': 'Tezos (XTZ)', 'id': 175}, {'coin': 'Uniswap (UNI)', 'id': 202}, {'coin': 'VeChain (VET)', 'id': 8}, {'coin': 'Waves (WAVES)', 'id': 133}, {'coin': 'Yearn.finance (YFI)', 'id': 220}, {'coin': 'Zcash (ZEC)', 'id': 162}]
+    bc_list = [{'coin': '0x (ZRX)', 'id': 168}, {'coin': 'Algorand (ALGO)', 'id': 216},
+               {'coin': 'Avalanche (AVAX)', 'id': 217}, {'coin': 'BAT (BAT)', 'id': 61},
+               {'coin': 'BinanceCoin BEP2 (BNB)', 'id': 16}, {'coin': 'BinanceCoin BEP20 (BNB)', 'id': 19},
+               {'coin': 'Bitcoin (BTC)', 'id': 93}, {'coin': 'Bitcoin Cash (BCH)', 'id': 172},
+               {'coin': 'Cardano (ADA)', 'id': 181}, {'coin': 'Chainlink (LINK)', 'id': 197},
+               {'coin': 'Cosmos (ATOM)', 'id': 198}, {'coin': 'Dash (DASH)', 'id': 140},
+               {'coin': 'Decentraland (MANA)', 'id': 227}, {'coin': 'Dogecoin (DOGE)', 'id': 115},
+               {'coin': 'EOS (EOS)', 'id': 178}, {'coin': 'Ether Classic (ETC)', 'id': 160},
+               {'coin': 'Ethereum (ETH)', 'id': 139}, {'coin': 'Ethereum BEP20 (ETH)', 'id': 212},
+               {'coin': 'ICON (ICX)', 'id': 104}, {'coin': 'IOTA (MIOTA)', 'id': 179},
+               {'coin': 'Komodo (KMD)', 'id': 134}, {'coin': 'Litecoin (LTC)', 'id': 99},
+               {'coin': 'Maker (MKR)', 'id': 213}, {'coin': 'Monero (XMR)', 'id': 149},
+               {'coin': 'NEAR Protocol (NEAR)', 'id': 76}, {'coin': 'NEM (XEM)', 'id': 173},
+               {'coin': 'NEO (NEO)', 'id': 177}, {'coin': 'OMG Network (OMG)', 'id': 48},
+               {'coin': 'Ontology (ONT)', 'id': 135}, {'coin': 'Polkadot (DOT)', 'id': 201},
+               {'coin': 'Polygon (MATIC)', 'id': 138}, {'coin': 'Qtum (QTUM)', 'id': 26},
+               {'coin': 'Ravencoin (RVN)', 'id': 205}, {'coin': 'Ripple (XRP)', 'id': 161},
+               {'coin': 'Shiba BEP20 (SHIB)', 'id': 32}, {'coin': 'Shiba ERC20 (SHIB)', 'id': 210},
+               {'coin': 'Solana (SOL)', 'id': 82}, {'coin': 'Stellar (XLM)', 'id': 182},
+               {'coin': 'TRON (TRX)', 'id': 185}, {'coin': 'Terra (LUNA)', 'id': 2}, {'coin': 'Tezos (XTZ)', 'id': 175},
+               {'coin': 'Uniswap (UNI)', 'id': 202}, {'coin': 'VeChain (VET)', 'id': 8},
+               {'coin': 'Waves (WAVES)', 'id': 133}, {'coin': 'Yearn.finance (YFI)', 'id': 220},
+               {'coin': 'Zcash (ZEC)', 'id': 162}]
     # for i in bc_list:
     #     list_id = i['id']
     #     id_list.append(list_id)
     # print(id_list)
-    id_list = [168, 216, 217, 61, 16, 19, 93, 172, 181, 197, 198, 140, 227, 115, 178, 160, 139, 212, 104, 179, 134, 99, 213, 149, 76, 173, 177, 48, 135, 201, 138, 26, 205, 161, 32, 210, 82, 182, 185, 2, 175, 202, 8, 133, 220, 162]
-    bestchange_links = [{168: 'zrx'}, {216: 'algorand'}, {217: 'avalanche'}, {61: 'bat'}, {16: 'binance-coin-bep2'},
-                        {19: 'binance-coin'}, {93: 'bitcoin'}, {172: 'bitcoin-cash'}, {181: 'cardano'},
-                        {197: 'chainlink'},
-                        {198: 'cosmos'}, {140: 'dash'}, {227: 'decentraland'}, {115: 'dogecoin'}, {178: 'eos'},
-                        {160: 'ethereum-classic'},
-                        {139: 'ethereum'}, {212: 'ethereum-bep20'}, {104: 'icon'}, {179: 'iota'}, {134: 'komodo)'},
-                        {99: 'litecoin'},
-                        {213: 'maker'}, {149: 'monero'}, {76: 'near'}, {173: 'nem'}, {177: 'neo'}, {48: 'omg'},
-                        {135: 'ontology'}, {201: 'polkadot'}, {138: 'polygon'}, {26: 'qtum'}, {205: 'ravencoin'},
-                        {161: 'ripple'},
-                        {32: 'shiba-inu-bep20'}, {210: 'shiba-inu'}, {82: 'solana'}, {182: 'stellar'}, {185: 'tron'},
-                        {2: 'terra'},
-                        {175: 'tezos'}, {202: 'uniswap'}, {8: 'vechain'}, {133: 'waves'}, {220: 'yearn-finance'},
-                        {162: 'zcash'}]
+    id_list = [168, 216, 217, 61, 16, 19, 93, 172, 181, 197, 198, 140, 227, 115, 178, 160, 139, 212, 104, 179, 134, 99,
+               213, 149, 76, 173, 177, 48, 135, 201, 138, 26, 205, 161, 32, 210, 82, 182, 185, 2, 175, 202, 8, 133, 220,
+               162]
+    bestchange_links = {168: 'zrx', 216: 'algorand', 217: 'avalanche', 61: 'bat', 16: 'binance-coin-bep2',
+                        19: 'binance-coin', 93: 'bitcoin', 172: 'bitcoin-cash', 181: 'cardano',
+                        197: 'chainlink',
+                        198: 'cosmos', 140: 'dash', 227: 'decentraland', 115: 'dogecoin', 178: 'eos',
+                        160: 'ethereum-classic',
+                        139: 'ethereum', 212: 'ethereum-bep20', 104: 'icon', 179: 'iota', 134: 'komodo)',
+                        99: 'litecoin',
+                        213: 'maker', 149: 'monero', 76: 'near', 173: 'nem', 177: 'neo', 48: 'omg',
+                        135: 'ontology', 201: 'polkadot', 138: 'polygon', 26: 'qtum', 205: 'ravencoin',
+                        161: 'ripple',
+                        32: 'shiba-inu-bep20', 210: 'shiba-inu', 82: 'solana', 182: 'stellar', 185: 'tron',
+                        2: 'terra',
+                        175: 'tezos', 202: 'uniswap', 8: 'vechain', 133: 'waves', 220: 'yearn-finance',
+                        162: 'zcash'}
     rates_list = []
     # print(id_list)
-
 
     for i in id_list:
         try:
             for j in id_list:
                 try:
                     # print(f"i: {i}, j: {j}")
+
                     res = api.rates().filter(i, j)
-                    give_link = bestchange_links[i]
-                    get_link = bestchange_links[j]
+
                     give_coin = res[0]['give_id']
                     get_coin = res[0]['get_id']
+
+                    give_link = bestchange_links[give_coin]
+                    get_link = bestchange_links[get_coin]
+                    
+
+
                     exchange = res[0]['exchange_id']
                     coins_rate = res[0]['rate']
                     reserve = res[0]['reserve']
@@ -83,21 +115,17 @@ async def bestchange_scaner(prmin, user_id):
                                 'max_sum': max_sum,
                                 'give': give,
                                 'get': get,
-                                'give_link':give_link,
-                                'get_link':get_link}
+                                'give_link': give_link,
+                                'get_link': get_link}
                     rates_list.append(dict_tmp)
                     # print(dict_tmp)
-
                 except:
                     pass
-
         except:
             pass
 
 
-
-    # print(rates_list)
-    # print(len(rates_list))
+    
 
     cur.execute(f"delete from binance_tickers")
     con.commit()
@@ -132,7 +160,6 @@ async def bestchange_scaner(prmin, user_id):
         except:
             pass
 
-
     bc_parse = []
     for j in rates_list:
         try:
@@ -151,18 +178,13 @@ async def bestchange_scaner(prmin, user_id):
             price_bbb = cur.fetchone()[0]
             # print('market price get coin: ', price_bbb)
             profit = sum / price_aaa / cc * price_bbb
-            give_l = rates_list['give_link']
-            get_l = rates_list['get_link']
+            give_l = j['give_link']
+            get_l = j['get_link']
+            exchanger_name = j['exchange_name']
             # if profit - sum >= 2:
-            tmp_dict = {'give_coin'  : aaa, 'get_coin' : bbb, 'bestchange_rate' : cc, 'binance_price_give' : price_aaa, 'binance_price_get' : price_bbb, 'profit' : profit, 'give_l':give_l, 'get_l':get_l}
+            tmp_dict = {'give_coin': aaa, 'get_coin': bbb, 'bestchange_rate': cc, 'binance_price_give': price_aaa,
+                        'binance_price_get': price_bbb, 'profit': profit, 'give_l': give_l, 'get_l': get_l, 'exchanger_name':exchanger_name}
             bc_parse.append(tmp_dict)
-            # print('profit: ', profit)
-            # print('give_coin: ', aaa)
-            # print('get_coin: ', bbb)
-            # print('rate: ', cc)
-            # print('market price give coin: ', price_aaa)
-            # print('market price get coin: ', price_bbb)
-            # print('$'*50)
 
         except:
             pass
@@ -171,13 +193,7 @@ async def bestchange_scaner(prmin, user_id):
         df = pd.DataFrame(bc_parse)
         str = df.sort_values(by='profit', ascending=False)
         strstr = str.head(1)
-        # print(strstr)
-        # p1 = strstr.iloc[0]['id_slvr']
-        # print(p1)
-        # print('\n', 'ANY B_PAY', '\n')
-        # print(strstr.iloc[0].to_json())
         try:
-            # for i in strstr:
             max_message = strstr.iloc[0].to_json()
             items_max = json.loads(max_message)
             give_coin_name = items_max['give_coin']
@@ -189,7 +205,9 @@ async def bestchange_scaner(prmin, user_id):
             round_slvr_proc_max = round(slvr_proc_max, 3)
             give_li = items_max['give_l']
             get_li = items_max['get_l']
+            exch_name = items_max['exchanger_name']
             
+
             cur.execute(f"select tele_id from arbi_users")
             users = cur.fetchall()
 
@@ -197,24 +215,21 @@ async def bestchange_scaner(prmin, user_id):
                 for i in users:
                     mes_for_user_id = i[0]
 
-                    await bot.send_message(mes_for_user_id,
-                                               f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
-                                               f"Buy {give_coin_name} on the Binance spot market by this price: {binance_price_give}\n\n"
-                                               f"Swap {give_coin_name} on the bestchange site for {get_coin_name}\n"
-                                               f"(Price: {bc_rate}) by this link:\n"
-                                               f"https://www.bestchange.ru/{give_li}-to-{get_li}.html\n\n"
-                                               f"Sell {get_coin_name} on the Binance spot market by this price: {binance_price_get}")
+                    bot.send_message(mes_for_user_id, f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
+                                           f"Buy {give_coin_name} on the Binance spot market by this price: {binance_price_give}\n\n"
+                                           f"Swap {give_coin_name} on the bestchange site for {get_coin_name} by this link:\n"
+                                           f"https://www.bestchange.ru/{give_li}-to-{get_li}.html\n"
+                          f"Price rate: {bc_rate}, Exchange name: {exch_name}"
+                                           f"Sell {get_coin_name} on the Binance spot market by this price: {binance_price_get}")
+
+                    
 
             else:
-                await bot.send_message(admin_id, 'No schemes')
+                bot.send_message(admin_id, 'No results')
                 
 
+
         except Exception as e:
-            await bot.send_message(admin_id, f'error: {e}')
-
-
-# end_time = datetime.now()
-# print(f"start: {start_time}, end: {end_time}")
-
-
+            bot.send_message(admin_id, f'error: {e}')
+            pass
 
