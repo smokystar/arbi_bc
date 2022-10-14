@@ -14,7 +14,12 @@ api_key = '1QrbAnjDYWcnmKoQYVn2ZSphucr4yXZtWEwUATG103rqfgJqG0VZ5kW7vdtMIS0Q'
 secret_key = 'IU08Ye3WRhrjBEZl28vA9CN3TWL2fLSEv1XMZA8kYjmASbWOPpvVwhXfF6s6WQyS'
 client = Client(api_key, secret_key)
 
-from main_bc import con, cur
+con = psycopg2.connect(user="udzclombmplopn",
+                                password="006bbc0a282a6a60d71ab63eceb99327b4c73794c97b3e968d74de449d939e4d",
+                                host="ec2-54-155-129-189.eu-west-1.compute.amazonaws.com",
+                                port="5432",
+                                database="d9tf4mansnquj2")
+cur = con.cursor()
 
 
 # start_time = datetime.now()
