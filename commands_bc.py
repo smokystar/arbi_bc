@@ -12,7 +12,7 @@ import time
 import requests
 import pandas as pd
 import re
-
+admin_id = 394652149
 
 api_key = '1QrbAnjDYWcnmKoQYVn2ZSphucr4yXZtWEwUATG103rqfgJqG0VZ5kW7vdtMIS0Q'
 secret_key = 'IU08Ye3WRhrjBEZl28vA9CN3TWL2fLSEv1XMZA8kYjmASbWOPpvVwhXfF6s6WQyS'
@@ -25,21 +25,26 @@ admin_id = 394652149
 n = 0
 
 async def start_cmd(message: types.Message):
-    await bot.send_message(message.from_user.id, 'Hello!', reply_markup=key_menu_client)
-
+    user_id = message.from_user.id
+    if user_id == admin_id:
+        await bot.send_message(message.from_user.id, 'Start tasks with activate command', reply_markup=key_menu_client)
+    else:
+        await bot.send_message(message.from_user.id, 'Привет! Подождите немного и скоро мы предоставим вам доступ к боту. Приятного пользования!')
 
 async def mainmenu(message: types.Message):
-    await bot.send_message(message.from_user.id, 'Main Menu', reply_markup=tasks_menu)
+    user_id = message.from_user.id
+    if user_id == admin_id:
+        await bot.send_message(message.from_user.id, 'Main Menu', reply_markup=tasks_menu)
 
 
 async def scan(message: types.Message):
     user_id = message.from_user.id
-    while n < 10:
-        try:
-            await bestchange_scaner(0.5, admin_id)
-            time.sleep(5)
-        except Exception as e:
-            await bot.send_message(message.from_user.id, f'Error occured!\n\n {e}')
+    if user_id == admin_id:
+        while n < 10:
+            try:
+                await bestchange_scaner(0.5, admin_id)
+            except Exception as e:
+                await bot.send_message(message.from_user.id, f'Error occured!\n\n {e}')
 
 
 def register_handlers_client_partners(dp: Dispatcher):
