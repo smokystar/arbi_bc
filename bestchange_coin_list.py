@@ -104,9 +104,7 @@ async def bestchange_scaner(prmin, user_id):
                                 'give': give,
                                 'get': get,
                                 'give_link': give_link,
-                                'get_link': get_link, 
-                                'q_give':q_give,
-                                'q_get':q_get}
+                                'get_link': get_link}
                     rates_list.append(dict_tmp)
                     # print(dict_tmp)
                 except:
@@ -167,15 +165,15 @@ async def bestchange_scaner(prmin, user_id):
             profit = sum / price_aaa / cc * price_bbb
             give_l = j['give_link']
             get_l = j['get_link']
-            qu_give = j['q_give']
-            qu_get = j['q_get']
-            mi_sum = j['min_sum']
-            ma_sum = j['max_sum']
+#             qu_give = j['q_give']
+#             qu_get = j['q_get']
+#             mi_sum = j['min_sum']
+#             ma_sum = j['max_sum']
             exchanger_name = j['exchange_name']
             # if profit - sum >= 2:
             tmp_dict = {'give_coin': aaa, 'get_coin': bbb, 'bestchange_rate': cc, 'binance_price_give': price_aaa,
                         'binance_price_get': price_bbb, 'profit': profit, 'give_l': give_l, 'get_l': get_l,
-                        'exchanger_name': exchanger_name, 'qu_give':qu_give, 'qu_get':qu_get, 'min':mi_sum, 'max':ma_sum}
+                        'exchanger_name': exchanger_name}
             bc_parse.append(tmp_dict)
 
         except:
@@ -198,10 +196,10 @@ async def bestchange_scaner(prmin, user_id):
             give_li = items_max['give_l']
             get_li = items_max['get_l']
             exch_name = items_max['exchanger_name']
-            qua_give = j['qu_give']
-            qua_get = j['qu_get']
-            minn = j['min']
-            maxx = j['max']
+#             qua_give = j['qu_give']
+#             qua_get = j['qu_get']
+#             minn = j['min']
+#             maxx = j['max']
 
             cur.execute(f"select tele_id from arbi_users")
             users = cur.fetchall()
@@ -210,15 +208,23 @@ async def bestchange_scaner(prmin, user_id):
                 for i in users:
                     mes_for_user_id = i[0]
 
+#                     await bot.send_message(mes_for_user_id,
+#                                            f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
+#                                            f"Buy {give_coin_name} on the Binance spot market by this price: {binance_price_give}\n\n"
+#                                            f"Swap {give_coin_name} on the bestchange site for {get_coin_name} by this link:\n"
+#                                            f"https://www.bestchange.ru/{give_li}-to-{get_li}.html\n\n"
+#                                            f"Give: {qua_give} {give_coin_name}\nGet: {qua_get} {get_coin_name}\n"
+#                                            f"Price rate: {bc_rate}\n"
+#                                            f"Min transaction: {minn}\n"
+#                                            f"Max transaction: {maxx}\n"
+#                                            f"Exchange name: {exch_name}\n\n"
+#                                            f"Sell {get_coin_name} on the Binance spot market by this price: {binance_price_get}")
                     await bot.send_message(mes_for_user_id,
                                            f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
                                            f"Buy {give_coin_name} on the Binance spot market by this price: {binance_price_give}\n\n"
                                            f"Swap {give_coin_name} on the bestchange site for {get_coin_name} by this link:\n"
                                            f"https://www.bestchange.ru/{give_li}-to-{get_li}.html\n\n"
-                                           f"Give: {qua_give} {give_coin_name}\nGet: {qua_get} {get_coin_name}\n"
                                            f"Price rate: {bc_rate}\n"
-                                           f"Min transaction: {minn}\n"
-                                           f"Max transaction: {maxx}\n"
                                            f"Exchange name: {exch_name}\n\n"
                                            f"Sell {get_coin_name} on the Binance spot market by this price: {binance_price_get}")
 
