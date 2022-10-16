@@ -58,7 +58,7 @@ async def bestchange_scaner(prmin, user_id):
                         197: 'chainlink',
                         198: 'cosmos', 140: 'dash', 227: 'decentraland', 115: 'dogecoin', 178: 'eos',
                         160: 'ethereum-classic',
-                        139: 'ethereum', 212: 'ethereum-bep20', 104: 'icon', 179: 'iota', 134: 'komodo)',
+                        139: 'ethereum', 212: 'ethereum-bep20', 104: 'icon', 179: 'iota', 134: 'komodo',
                         99: 'litecoin',
                         213: 'maker', 149: 'monero', 76: 'near', 173: 'nem', 177: 'neo', 48: 'omg',
                         135: 'ontology', 201: 'polkadot', 138: 'polygon', 26: 'qtum', 205: 'ravencoin',
