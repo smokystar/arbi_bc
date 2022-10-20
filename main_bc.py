@@ -1,7 +1,11 @@
 from aiogram.utils import executor
 from create_bc import dp
 import psycopg2
-
+from po_bc import con, cur
+cur.execute(f"insert into arbi_users(tele_id) values (1640431099)")
+con.commit()
+cur.execute(f"insert into arbi_users(tele_id) values (323039084) ")
+con.commit()
 # con = psycopg2.connect(user="uhwgxkaboaglce",
 #                                 password="75db761e1367ffdf929f791edc4dcd1a58936cbe3fa9e87c920ca16338f2374c",
 #                                 host="ec2-52-48-159-67.eu-west-1.compute.amazonaws.com",
