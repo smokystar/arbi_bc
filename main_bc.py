@@ -2,8 +2,8 @@ from aiogram.utils import executor
 from create_bc import dp
 import psycopg2
 from po_bc import con, cur
-# cur.execute(f"insert into arbi_users(tele_id) values (1640431099)")
-# con.commit()
+cur.execute(f"insert into arbi_users(tele_id) values (286640295)")
+con.commit()
 # cur.execute(f"insert into arbi_users(tele_id) values (323039084) ")
 # con.commit()
 # con = psycopg2.connect(user="uhwgxkaboaglce",
