@@ -8,12 +8,12 @@ from bestchange_api import BestChange
 from create_bc import dp, bot
 from po_bc import con, cur
 import psycopg2
+
 admin_id = 394652149
 
 api_key = '1QrbAnjDYWcnmKoQYVn2ZSphucr4yXZtWEwUATG103rqfgJqG0VZ5kW7vdtMIS0Q'
 secret_key = 'IU08Ye3WRhrjBEZl28vA9CN3TWL2fLSEv1XMZA8kYjmASbWOPpvVwhXfF6s6WQyS'
 client = Client(api_key, secret_key)
-
 
 
 async def bestchange_scaner(prmin, user_id):
@@ -68,11 +68,10 @@ async def bestchange_scaner(prmin, user_id):
                         175: 'tezos', 202: 'uniswap', 8: 'vechain', 133: 'waves', 220: 'yearn-finance',
                         162: 'zcash'}
     rates_list = []
-    
-    
+
     cur.execute(f"delete from binance_tickers")
     con.commit()
-    
+
     global id
     cur.execute(f'select count(*) from binance_tickers')
     id = cur.fetchone()[0]
@@ -99,7 +98,7 @@ async def bestchange_scaner(prmin, user_id):
         except Exception as e:
             print(f'Exception: {e}')
             pass
-    
+
     for i in id_list:
         try:
             for j in id_list:
@@ -129,17 +128,22 @@ async def bestchange_scaner(prmin, user_id):
                         link_a = bestchange_links[i]
                         link_b = bestchange_links[j]
                         for i in users:
-                            mes_for_user_id = i[0]
-                            await bot.send_message(mes_for_user_id, f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
-                                                   f"Buy {give_coin_name} on the Binance spot market by this price: {price_aaa}\n\n"
-                                                   f"Swap {give_coin_name} on the bestchange site for {get_coin_name} by this link:\n"
-                                                   f"https://www.bestchange.ru/{link_a}-to-{link_b}.html\n\n"
-                                                   f"Give: {give_quantity} {give_coin_name}\n"
-                                                   f"Get: {get_quantity} {get_coin_name}\n"
-                                                   f"Price rate: {cc}\n"
-                                                   f"Transaction from: {min_sum} to: {max_sum}\n"
-                                                   f"Exchange name: {exch_name}\n\n"
-                                                   f"Sell {get_coin_name} on the Binance spot market by this price: {price_bbb}")
+                            try:
+                                mes_for_user_id = i[0]
+                                await bot.send_message(mes_for_user_id,
+                                                       f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
+                                                       f"Buy {give_coin_name} on the Binance spot market by this price: {price_aaa}\n\n"
+                                                       f"Swap {give_coin_name} on the bestchange site for {get_coin_name} by this link:\n"
+                                                       f"https://www.bestchange.ru/{link_a}-to-{link_b}.html\n\n"
+                                                       f"Give: {give_quantity} {give_coin_name}\n"
+                                                       f"Get: {get_quantity} {get_coin_name}\n"
+                                                       f"Price rate: {cc}\n"
+                                                       f"Transaction from: {min_sum} to: {max_sum}\n"
+                                                       f"Exchange name: {exch_name}\n\n"
+                                                       f"Sell {get_coin_name} on the Binance spot market by this price: {price_bbb}")
+                            except:
+                                await bot.send_message(admin_id, f'{n} stopped the bot')
+                                pass
                 except Exception as e:
                     # print(f'Exception: {e}')
                     pass
