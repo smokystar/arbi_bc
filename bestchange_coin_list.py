@@ -131,16 +131,17 @@ async def bestchange_scaner(prmin, user_id):
                             try:
                                 mes_for_user_id = i[0]
                                 await bot.send_message(mes_for_user_id,
-                                                       f"Profit scheme just has been found! Profit before taxes: {round_slvr_proc_max}%\n\n"
-                                                       f"Buy {give_coin_name} on the Binance spot market by this price: {price_aaa}\n\n"
-                                                       f"Swap {give_coin_name} on the bestchange site for {get_coin_name} by this link:\n"
+                                                       f"Прибыльная схема найдена! Процент прибыльности без учета комиссии: {round_slvr_proc_max}%\n\n"
+                                                       f"Купите {give_coin_name} на спотовом рынке binance по цене: {price_aaa}\n\n"
+                                                       f"Обменяйте {give_coin_name} на сайте bestchange {get_coin_name} по ссылке:\n"
                                                        f"https://www.bestchange.ru/{link_a}-to-{link_b}.html\n\n"
-                                                       f"Give: {give_quantity} {give_coin_name}\n"
-                                                       f"Get: {get_quantity} {get_coin_name}\n"
-                                                       f"Price rate: {cc}\n"
-                                                       f"Transaction from: {min_sum} to: {max_sum}\n"
-                                                       f"Exchange name: {exch_name}\n\n"
-                                                       f"Sell {get_coin_name} on the Binance spot market by this price: {price_bbb}")
+                                                       f"Отдаёте: {give_quantity} {give_coin_name}\n"
+                                                       f"Получаете: {get_quantity} {get_coin_name}\n"
+                                                       f"Курс: {cc}\n"
+                                                       f"Транзакция от: {min_sum} до: {max_sum}\n"
+                                                       f"Имя обменника: {exch_name}\n\n"
+                                                       f"Продайте {get_coin_name} на спотовом рынке binance по цене: {price_bbb}\n\n"
+                                                      f"Обращайте внимание на риски, проверяйте обменники перед проведением транзакций. Bestchange - информационный ресурс, на котором могут быть обменники-обманщики. Мы предоставляем информацию, но не принимаем никаких решений за вас. Помните это! Успехов и прибыльной торговли!")
                             except:
                                 mes_for_user_id = i[0]
                                 await bot.send_message(admin_id, f'{mes_for_user_id} stopped the bot')
