@@ -42,7 +42,7 @@ async def scan(message: types.Message):
     if user_id == admin_id:
         while n < 10:
             try:
-                await bestchange_scaner(1.2, admin_id)
+                await bestchange_scaner(0.5, admin_id)
             except Exception as e:
                 await bot.send_message(message.from_user.id, f'Error occured!\n\n {e}')
 
