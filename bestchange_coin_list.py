@@ -142,7 +142,8 @@ async def bestchange_scaner(prmin, user_id):
                                                        f"Exchange name: {exch_name}\n\n"
                                                        f"Sell {get_coin_name} on the Binance spot market by this price: {price_bbb}")
                             except:
-                                await bot.send_message(admin_id, f'{n} stopped the bot')
+                                mes_for_user_id = i[0]
+                                await bot.send_message(admin_id, f'{mes_for_user_id} stopped the bot')
                                 pass
                 except Exception as e:
                     # print(f'Exception: {e}')
